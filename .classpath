@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Configuration"/>
+	<classpathentry kind="lib" path="C:/Program Files/Weka-3-6/weka.jar" sourcepath="C:/Program Files/Weka-3-6/weka-src.jar"/>
+	<classpathentry kind="lib" path="C:/apache-log4j-2.0.2-bin/log4j-1.2-api-2.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/apache-log4j-2.0.2-bin/log4j-api-2.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/apache-log4j-2.0.2-bin/log4j-core-2.0.2.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files (x86)/ImageJ/ij.jar"/>
+	<classpathentry kind="lib" path="C:/waveletsJava/1.0/waveletsJava-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/fractional_splines_wavelets/1.0/fractional_splines_wavelets-1.0.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
