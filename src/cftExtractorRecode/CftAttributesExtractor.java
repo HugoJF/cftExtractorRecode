@@ -13,6 +13,8 @@ import cftExtractorRecode.image_set.ImageSet;
 public class CftAttributesExtractor {
 	
 	private ArrayList<Extractor> extractors = new ArrayList<Extractor>();
+	private ArrayList<String> onlyList = new ArrayList<String>();
+	private ArrayList<String> ignoreList = new ArrayList<String>();
 	private ImageSet imageset;
 	
 	public CftAttributesExtractor(ImageSet is) {
@@ -35,6 +37,7 @@ public class CftAttributesExtractor {
 		this.extractors.add(ex);
 	}
 	
+	
 	public ArrayList<String> getAllAttributesNames() {
 		ArrayList<String> names = new ArrayList<String>();
 		for(Extractor ex : extractors) {
@@ -44,5 +47,28 @@ public class CftAttributesExtractor {
 		}
 		
 		return names;
+	}
+	
+	public ArrayList<String> getAllUsedAttributesNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for(Extractor ex : extractors) {
+			for(String name : ex.getAtributtesNames()) {
+				if(!ignoreList.contains(name)) {
+					if(onlyList.size() == 0 || onlyList.size() != 0 && onlyList.contains(name)) {
+						names.add(name);
+					}
+				}
+			}
+		}
+		
+		return names;
+	}
+
+	public void setIgnoreList(ArrayList<String> ignoreParametersList) {
+		this.ignoreList = ignoreParametersList;
+	}
+
+	public void setOnlyList(ArrayList<String> onlyParametersList) {
+		this.onlyList = onlyParametersList;
 	}
 }
