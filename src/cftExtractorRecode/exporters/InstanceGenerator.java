@@ -10,47 +10,51 @@ import weka.core.FastVector;
 import weka.core.Instance;
 import weka.core.Instances;
 
-public class InstanceExporter extends Exporter{
+public class InstanceGenerator extends Exporter{
 
 	private Instances instances;
 	
-	private ImageSet imageset;
-	
 	private ArrayList<String> attributes;
 	
-	public InstanceExporter(ImageSet is, ArrayList<String> attributes) {
-		this.imageset = is;
+	public InstanceGenerator(ImageSet is, ArrayList<String> attributes) {
+		this.imageSet = is;
 		this.attributes = attributes;
 	}
 	
 	@Override
 	public void export() {
+		//Generate attribute name list
 		FastVector attributesNames = new FastVector();
 		for(String att : attributes) {
 			attributesNames.addElement(new Attribute(att));
 		}
-		
+		//Generate class values list
 		FastVector classValues = new FastVector();
-		for(ImageClass ic : this.imageset.getImageClasses()) {
+		for(ImageClass ic : this.imageSet.getImageClasses()) {
 			classValues.addElement(ic.getClassName());
-			LOGGER.info(ic.getClassName());
 		}
+		//Add the class as an a new Attribute
 		attributesNames.addElement(new Attribute("class", classValues));
 		
-		instances = new Instances(imageset.getRelation(), attributesNames, 1);
-		instances.setClassIndex(attributesNames.size() - 1);
+		//Create the instances
+		instances = new Instances(imageSet.getRelation(), attributesNames, 1);
+		//instances.setClassIndex(attributesNames.size() - 1);
 
-		for(ImageClass ic : imageset.getImageClasses()) {
+		for(ImageClass ic : imageSet.getImageClasses()) {
 			for(Image image : ic.getImages()) {
-				double[] instanceValues = new double[attributes.size() + 1];
+				//Create an array to hold the attribute values
+				double[] instanceValues = new double[attributesNames.size()];
+				//For every attribute add its value to the arrya
 				for(int i = 0; i < attributes.size(); i++) {
 					instanceValues[i] = Double.valueOf(image.getAttributeValue(attributes.get(i)));
 				}
+				//Reset last value of the array (class)
 				instanceValues[instanceValues.length - 1] = 0D;
+				//Create the final instance object
 				Instance instance = new Instance(1, instanceValues);
-				instance.setDataset(instances);
-				LOGGER.info(image.getFolderName());
-				instance.setClassValue(image.getFolderName());
+				//instance.setDataset(instances);
+				//instance.setClassValue(image.getFolderName());
+				instance.setValue((Attribute) attributesNames.elementAt(attributesNames.size() - 1), image.getFolderName());
 				instances.add(instance);
 			}
 		}

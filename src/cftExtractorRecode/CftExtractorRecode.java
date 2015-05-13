@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import weka.core.Instances;
 import weka.core.converters.ArffSaver;
-import cftExtractorRecode.exporters.ArffExporter;
+import cftExtractorRecode.exporters.WekaExporter;
 import cftExtractorRecode.exporters.Exporter;
-import cftExtractorRecode.exporters.InstanceExporter;
+import cftExtractorRecode.exporters.InstanceGenerator;
 import cftExtractorRecode.extractors.*;
 import cftExtractorRecode.image_set.Image;
 import cftExtractorRecode.image_set.ImageClass;
@@ -17,7 +17,6 @@ public class CftExtractorRecode {
 	
 	public ArrayList<String> ignoreParametersList = new ArrayList<String>();
 	public ArrayList<String> onlyParametersList = new ArrayList<String>();
-	public CftExtractorRecode cer;
 	
 	public static void main(String[] args) {
 		CftExtractorRecode cer = new CftExtractorRecode();
@@ -37,13 +36,13 @@ public class CftExtractorRecode {
 		
 		if(Configuration.getConfiguration("parameters.ignorelist") != null) {
 			for(String ignore : Configuration.getConfiguration("parameters.ignorelist").split(",")) {
-				cer.addParameterToIgnoreList(ignore);
+				this.addParameterToIgnoreList(ignore);
 			}
 		}
 		
 		if(Configuration.getConfiguration("parameters.onlylist") != null) {
 			for(String only : Configuration.getConfiguration("parameters.onlylist").split(",")) {
-				cer.addParameterToOnlyList(only);
+				this.addParameterToOnlyList(only);
 			}
 		}
 		
@@ -87,13 +86,42 @@ public class CftExtractorRecode {
 				image.debug();
 			}
 		}
-		InstanceExporter instanceExporter = new InstanceExporter(is, cae.getAllUsedAttributesNames());
+		InstanceGenerator instanceExporter = new InstanceGenerator(is, cae.getAllUsedAttributesNames());
 		instanceExporter.debug();
 		instanceExporter.export();
-		ArffExporter arffExporter = new ArffExporter(instanceExporter.getInstances(), new ArffSaver());
+		WekaExporter arffExporter = new WekaExporter(instanceExporter.getInstances(), new ArffSaver());
 		arffExporter.setPath(Configuration.getConfiguration("arff.path"));
 		arffExporter.export();
 		
+	}
+	
+	public Instances generateInstances(String relation, String path) {
+		ImageSet is = null;
+		try {
+			is = new ImageSet(path);
+		} catch (Exception ex) { 
+			ex.printStackTrace();
+		}
+		is.setRelation(relation);
+		CftAttributesExtractor cae = new CftAttributesExtractor(is);
+		cae.addExtractor(new ColorExtractor());
+		cae.addExtractor(new CoOcorrenceMatrixExtractor());
+		cae.addExtractor(new FormExtractor());
+		cae.addExtractor(new LBPExtractor());
+		cae.addExtractor(new WaveletExtractor());
+		cae.setIgnoreList(this.ignoreParametersList);
+		cae.setOnlyList(this.onlyParametersList);
+		cae.extractAttributes();
+		
+		for(ImageClass ic : is.getImageClasses()) {
+			for(Image image : ic.getImages()) {
+				image.debug();
+			}
+		}
+		InstanceGenerator InstanceGenerator = new InstanceGenerator(is, cae.getAllUsedAttributesNames());
+		InstanceGenerator.debug();
+		InstanceGenerator.export();
+		return InstanceGenerator.getInstances();
 	}
 
 }

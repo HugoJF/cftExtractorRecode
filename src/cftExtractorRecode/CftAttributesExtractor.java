@@ -5,6 +5,8 @@ import ij.ImagePlus;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import cftExtractorRecode.extractors.Extractor;
 import cftExtractorRecode.image_set.Image;
 import cftExtractorRecode.image_set.ImageClass;
@@ -16,11 +18,13 @@ public class CftAttributesExtractor {
 	private ArrayList<String> onlyList = new ArrayList<String>();
 	private ArrayList<String> ignoreList = new ArrayList<String>();
 	private ImageSet imageset;
+
+	private final static Logger LOGGER = Logger.getLogger(ImageClass.class);
 	
 	public CftAttributesExtractor(ImageSet is) {
 		this.imageset = is;
 	}
-	
+	 
 	public void extractAttributes() {
 		for(ImageClass ic : imageset.getImageClasses()) {
 			for(Image image : ic.getImages()) {
@@ -45,7 +49,6 @@ public class CftAttributesExtractor {
 				names.add(name);
 			}
 		}
-		
 		return names;
 	}
 	
@@ -60,7 +63,7 @@ public class CftAttributesExtractor {
 				}
 			}
 		}
-		
+		LOGGER.info("Returning all attribute names used: " + names.size() + " attributes");
 		return names;
 	}
 

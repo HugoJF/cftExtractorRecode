@@ -7,16 +7,16 @@ import cftExtractorRecode.image_set.ImageSet;
 
 public abstract class Exporter {
 	
-	protected ImageSet imageset;
+	protected ImageSet imageSet;
 	
 	protected Logger LOGGER = Logger.getLogger(Exporter.class);
 	
 	public void setImageSet(ImageSet is) {
-		this.imageset = is;
+		this.imageSet = is;
 	}
 	
 	public ImageSet getImageSet() {
-		return this.imageset;
+		return this.imageSet;
 	}
 	
 	public abstract void export();
