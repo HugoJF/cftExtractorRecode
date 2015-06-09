@@ -12,10 +12,20 @@ import weka.core.Instances;
 
 public class InstanceGenerator extends Exporter{
 
+	/**
+	 * Instance being exported
+	 */
 	private Instances instances;
 	
+	/**
+	 * Attributes to export
+	 */
 	private ArrayList<String> attributes;
 	
+	/**
+	 * @param is - ImageSet of extracted attributes
+	 * @param attributes - attribute name list
+	 */
 	public InstanceGenerator(ImageSet is, ArrayList<String> attributes) {
 		this.imageSet = is;
 		this.attributes = attributes;
@@ -60,6 +70,9 @@ public class InstanceGenerator extends Exporter{
 		}
 	}
 
+	/**
+	 * @return Instances being exported
+	 */
 	public Instances getInstances() {
 		
 		return this.instances;

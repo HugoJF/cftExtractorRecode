@@ -27,7 +27,7 @@ public class Image {
 	 */
 	private String folder;
 	/**
-	 * 
+	 * HashMap containing attributes names and values of its extracted attributes
 	 */
 	private HashMap<String, String> attributes = new HashMap<String, String>();
 	/**
@@ -40,7 +40,7 @@ public class Image {
 	 * @param folder - the image's class/folder
 	 * @throws Exception
 	 */
-	
+
 	public Image(String absolutePath, String folder) throws Exception {
 		this.absolutePath = absolutePath;
 		BufferedImage image = ImageIO.read(new File(absolutePath));
@@ -75,14 +75,14 @@ public class Image {
 		}
 		return this.folder;
 	}
-	
+
 	public void addAttribute(String attributeName, String attributeValue) {
 		this.attributes.put(attributeName, attributeValue);
 	}
-	
+
 	public String getAttributeValue(String attributeName) {
-		for(Entry<String, String> att : attributes.entrySet()) {
-			if(att.getKey().equals(attributeName)) {
+		for (Entry<String, String> att : attributes.entrySet()) {
+			if (att.getKey().equals(attributeName)) {
 				return att.getValue();
 			}
 		}
@@ -95,7 +95,7 @@ public class Image {
 	}
 
 	public void addMultipleAttributes(HashMap<String, String> atts) {
-		for(Entry<String, String> entry : atts.entrySet()) {
+		for (Entry<String, String> entry : atts.entrySet()) {
 			addAttribute(entry.getKey(), entry.getValue());
 		}
 	}
@@ -103,5 +103,5 @@ public class Image {
 	public void debug() {
 		LOGGER.debug("DEBUG IMAGE: " + this.absolutePath + " containing " + attributes.size() + " attributes");
 	}
-	
+
 }

@@ -24,6 +24,11 @@ public class CftExtractorRecode {
 		cer.runFromCLI();
 	}
 
+	/**
+	 * Prepare the Configuration class to run
+	 * 
+	 * @param args Runtime args
+	 */
 	public void setupConfiguration(String args[]) {
 		Configuration.addNewValidParameter("imageset.path", true);
 		Configuration.addNewValidParameter("imageset.relation", true);
@@ -54,15 +59,24 @@ public class CftExtractorRecode {
 		
 		Configuration.debugParameters();
 	}
+	/**
+	 * @param only - add parameter to extraction list
+	 */
 	public void addParameterToOnlyList(String only) {
 		this.onlyParametersList.add(only);
 	}
 
+	/**
+	 * @param ignore - add parameter to ignore list
+	 */
 	public void addParameterToIgnoreList(String ignore) {
 		this.ignoreParametersList.add(ignore);
 	}
 	
 	
+	/**
+	 * Method for when running directly from CLI
+	 */
 	public void runFromCLI() {
 		ImageSet is = null;
 		try {
@@ -95,6 +109,13 @@ public class CftExtractorRecode {
 		
 	}
 	
+	/**
+	 * Extracts CFT Attributes from ImageSet and returns the results
+	 * 
+	 * @param relation ImageSet name
+	 * @param path ImageSet path
+	 * @return Weka Instances of attributes extracted
+	 */
 	public Instances generateInstances(String relation, String path) {
 		ImageSet is = null;
 		try {
