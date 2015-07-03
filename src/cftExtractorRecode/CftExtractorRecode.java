@@ -20,44 +20,50 @@ public class CftExtractorRecode {
 	
 	public static void main(String[] args) {
 		CftExtractorRecode cer = new CftExtractorRecode();
-		cer.setupConfiguration(args);
-		cer.runFromCLI();
+		Configuration config = cer.setupConfiguration(args);
+		cer.run(config);
 	}
 
 	/**
 	 * Prepare the Configuration class to run
 	 * 
 	 * @param args Runtime args
+	 * @return 
 	 */
-	public void setupConfiguration(String args[]) {
-		Configuration.addNewValidParameter("imageset.path", true);
-		Configuration.addNewValidParameter("imageset.relation", true);
-		Configuration.addNewValidParameter("random.seed", true);
-		Configuration.addNewValidParameter("arff.path", true);
-		Configuration.addNewValidParameter("parameters.ignorelist", false);
-		Configuration.addNewValidParameter("parameters.onlylist", false);
+	public Configuration setupConfiguration(String args[]) {
+		Configuration config = new Configuration();
 		
-		Configuration.readFromRunArgs(args);
 		
-		if(Configuration.getConfiguration("parameters.ignorelist") != null) {
-			for(String ignore : Configuration.getConfiguration("parameters.ignorelist").split(",")) {
+		config.addNewValidParameter("imageset.path", true);
+		config.addNewValidParameter("imageset.relation", true);
+		config.addNewValidParameter("random.seed", true);
+		config.addNewValidParameter("arff.path", true);
+		config.addNewValidParameter("parameters.ignorelist", false);
+		config.addNewValidParameter("parameters.onlylist", false);
+		
+		config.readFromRunArgs(args);
+		
+		if(config.getConfiguration("parameters.ignorelist") != null) {
+			for(String ignore : config.getConfiguration("parameters.ignorelist").split(",")) {
 				this.addParameterToIgnoreList(ignore);
 			}
 		}
 		
-		if(Configuration.getConfiguration("parameters.onlylist") != null) {
-			for(String only : Configuration.getConfiguration("parameters.onlylist").split(",")) {
+		if(config.getConfiguration("parameters.onlylist") != null) {
+			for(String only : config.getConfiguration("parameters.onlylist").split(",")) {
 				this.addParameterToOnlyList(only);
 			}
 		}
 		
 		try {
-			Configuration.verifyArgs();
+			config.verifyArgs();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		Configuration.debugParameters();
+		config.debugParameters();
+		
+		return config;
 	}
 	/**
 	 * @param only - add parameter to extraction list
@@ -77,14 +83,14 @@ public class CftExtractorRecode {
 	/**
 	 * Method for when running directly from CLI
 	 */
-	public void runFromCLI() {
+	public void run(Configuration config) {
 		ImageSet is = null;
 		try {
-			is = new ImageSet(Configuration.getConfiguration("imageset.path"));
+			is = new ImageSet(config.getConfiguration("imageset.path"));
 		} catch (Exception ex) { 
 			ex.printStackTrace();
 		}
-		is.setRelation(Configuration.getConfiguration("imageset.relation"));
+		is.setRelation(config.getConfiguration("imageset.relation"));
 		CftAttributesExtractor cae = new CftAttributesExtractor(is);
 		cae.addExtractor(new ColorExtractor());
 		cae.addExtractor(new CoOcorrenceMatrixExtractor());
@@ -104,7 +110,7 @@ public class CftExtractorRecode {
 		instanceExporter.debug();
 		instanceExporter.export();
 		WekaExporter arffExporter = new WekaExporter(instanceExporter.getInstances(), new ArffSaver());
-		arffExporter.setPath(Configuration.getConfiguration("arff.path"));
+		arffExporter.setPath(config.getConfiguration("arff.path"));
 		arffExporter.export();
 		
 	}
