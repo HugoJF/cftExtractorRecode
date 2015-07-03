@@ -122,14 +122,16 @@ public class CftExtractorRecode {
 	 * @param path ImageSet path
 	 * @return Weka Instances of attributes extracted
 	 */
-	public Instances generateInstances(String relation, String path) {
+	public Instances generateInstances(Configuration config) {
 		ImageSet is = null;
 		try {
-			is = new ImageSet(path);
+			//is = new ImageSet(path);
+			is = new ImageSet(config.getConfiguration("imageset.path"));
 		} catch (Exception ex) { 
 			ex.printStackTrace();
 		}
-		is.setRelation(relation);
+		//is.setRelation(relation);
+		is.setRelation(config.getConfiguration("imageset.relation"));
 		CftAttributesExtractor cae = new CftAttributesExtractor(is);
 		cae.addExtractor(new ColorExtractor());
 		cae.addExtractor(new CoOcorrenceMatrixExtractor());
