@@ -43,14 +43,14 @@ public class CftExtractorRecode {
 		
 		config.readFromRunArgs(args);
 		
-		if(config.getConfiguration("parameters.ignorelist") != null) {
-			for(String ignore : config.getConfiguration("parameters.ignorelist").split(",")) {
+		if(config.getConfig("parameters.ignorelist") != null) {
+			for(String ignore : config.getConfig("parameters.ignorelist").split(",")) {
 				this.addParameterToIgnoreList(ignore);
 			}
 		}
 		
-		if(config.getConfiguration("parameters.onlylist") != null) {
-			for(String only : config.getConfiguration("parameters.onlylist").split(",")) {
+		if(config.getConfig("parameters.onlylist") != null) {
+			for(String only : config.getConfig("parameters.onlylist").split(",")) {
 				this.addParameterToOnlyList(only);
 			}
 		}
@@ -86,11 +86,11 @@ public class CftExtractorRecode {
 	public void run(Configuration config) {
 		ImageSet is = null;
 		try {
-			is = new ImageSet(config.getConfiguration("imageset.path"));
+			is = new ImageSet(config.getConfig("imageset.path"));
 		} catch (Exception ex) { 
 			ex.printStackTrace();
 		}
-		is.setRelation(config.getConfiguration("imageset.relation"));
+		is.setRelation(config.getConfig("imageset.relation"));
 		CftAttributesExtractor cae = new CftAttributesExtractor(is);
 		cae.addExtractor(new ColorExtractor());
 		cae.addExtractor(new CoOcorrenceMatrixExtractor());
@@ -110,7 +110,7 @@ public class CftExtractorRecode {
 		instanceExporter.debug();
 		instanceExporter.export();
 		WekaExporter arffExporter = new WekaExporter(instanceExporter.getInstances(), new ArffSaver());
-		arffExporter.setPath(config.getConfiguration("arff.path"));
+		arffExporter.setPath(config.getConfig("arff.path"));
 		arffExporter.export();
 		
 	}
@@ -126,12 +126,12 @@ public class CftExtractorRecode {
 		ImageSet is = null;
 		try {
 			//is = new ImageSet(path);
-			is = new ImageSet(config.getConfiguration("imageset.path"));
+			is = new ImageSet(config.getConfig("imageset.path"));
 		} catch (Exception ex) { 
 			ex.printStackTrace();
 		}
 		//is.setRelation(relation);
-		is.setRelation(config.getConfiguration("imageset.relation"));
+		is.setRelation(config.getConfig("imageset.relation"));
 		CftAttributesExtractor cae = new CftAttributesExtractor(is);
 		cae.addExtractor(new ColorExtractor());
 		cae.addExtractor(new CoOcorrenceMatrixExtractor());
